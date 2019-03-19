@@ -12,3 +12,13 @@ Then install shodan and requests
 
 This tool requires a Shodan API key
 
+## To use Docker
+
+```bash
+git clone https://github.com/NotoriousRebel/RailRoadBandit
+cd RailRoadBandit
+# place shodan key 
+docker build -t railbandit .  
+docker run -it railbandit
+```
+
