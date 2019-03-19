@@ -1,2 +1,14 @@
 # RailRoadBandit
-Autopwn tool for CVE-2019-5418 (https://chybeta.github.io/2019/03/16/Analysis-for%E3%80%90CVE-2019-5418%E3%80%91File-Content-Disclosure-on-Rails/) using shodan!
+
+This tool allows you to read files 
+
+The only thing you need is Python 3.x
+
+Then install shodan and requests
+
+```pip install -r requirements.txt```
+
+### This tool uses Shodan API 
+
+This tool requires a Shodan API key
+
