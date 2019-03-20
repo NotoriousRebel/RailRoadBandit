@@ -6,7 +6,7 @@ The only thing you need is Python 3.x
 
 Then install shodan and requests
 
-```pip install -r requirements.txt```
+```pip3 install -r requirements.txt```
 
 ### This tool uses Shodan API 
 
