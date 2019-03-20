@@ -1,6 +1,9 @@
 # RailRoadBandit
 
 This tool allows you to read arbitrary files from vulnerable web servers that run ruby on rails. 
+# CVE-2019-5418
+
+Due to ruby renders files this can allow for you to read arbitrary files on the system
 
 The only thing you need is Python 3.x
 
