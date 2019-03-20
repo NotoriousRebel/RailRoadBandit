@@ -42,9 +42,16 @@ def main():
     check_args()
     url = sys.argv[1]
     while True:
-        file = input("Enter file to read (enter quit to exit): ")
-        if file.lower() == 'quit':
-            break
+        try:
+            file = input("Enter file to read (enter quit to exit): ")
+        except Exception:
+            file = raw_input("Enter file to read (enter quit to exit): ")
+		try:
+			if file.lower() == 'quit':
+				break
+		except Exception:
+			if file == 'quit'
+				break
         response = read_file(url, file)
         print(response.text)
 
