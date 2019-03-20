@@ -9,11 +9,11 @@ can cause arbitrary files on the target server to be rendered, disclosing file c
 
 To read more visit: [More Information on CVE](https://chybeta.github.io/2019/03/16/Analysis-for%E3%80%90CVE-2019-5418%E3%80%91File-Content-Disclosure-on-Rails/)
 
-The only thing you need is Python 3.x
+The only thing you need is Python.
 
-Then install shodan and requests
+Then install requests
 
-```pip3 install -r requirements.txt```
+```pip3 install requests or pip install requests```
 
 ## TODO
 
