@@ -15,9 +15,10 @@ Then install shodan and requests
 
 ```pip3 install -r requirements.txt```
 
-### This tool uses Shodan API 
+### TODO
 
-This tool requires a Shodan API key
+# Integrate Shodan
+
 
 ## To use Docker
 
