@@ -7,7 +7,6 @@ except ImportError:
     print('\n\033[93m[!] Requests library not found, please install before proceeding.\n\n \033[0m')
     sys.exit(1)
 
-
 def banner():
     banner = """
     ----------------------------------------------
